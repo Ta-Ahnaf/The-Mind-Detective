@@ -2,22 +2,18 @@ import streamlit as st
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 import torch.nn.functional as F
-import os
-import zipfile
-import gdown
 from emotion_resources import get_random_resource
+import os
+import gdown
+import zipfile
 
-# ---------------------- Model Download ----------------------
-MODEL_ZIP_URL = "https://drive.google.com/uc?id=1iZzjN96FcTE7o05vKhPrllmI6sEYrrzc"
+# ---------------------- Download Model if Not Exists ----------------------
 MODEL_DIR = "my_emotion_model"
-
 if not os.path.exists(MODEL_DIR):
-    st.info("Downloading the emotion model...")
-    gdown.download(MODEL_ZIP_URL, "my_emotion_model.zip", quiet=False)
-    with zipfile.ZipFile("my_emotion_model.zip", 'r') as zip_ref:
+    url = "https://drive.google.com/uc?id=1iZzjN96FcTE7o05vKhPrllmI6sEYrrzc"
+    gdown.download(url, "model.zip", quiet=False)
+    with zipfile.ZipFile("model.zip", 'r') as zip_ref:
         zip_ref.extractall(MODEL_DIR)
-    os.remove("my_emotion_model.zip")
-    st.success("Model downloaded!")
 
 # ---------------------- Model Loading ----------------------
 @st.cache_resource
